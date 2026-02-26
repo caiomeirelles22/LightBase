@@ -4,6 +4,7 @@ import "./globals.css";
 import ThemeRegistry from "@/components/ThemeRegistry/ThemeRegistry";
 import Header from "@/components/Layout/Header";
 import { Box } from "@mui/material";
+import { CustomerProvider } from "@/context/CustomerContext";
 
 const roboto = Roboto({
   weight: ["300", "400", "500", "700"],
@@ -26,18 +27,21 @@ export default function RootLayout({
     <html lang="pt-BR">
       <body className={roboto.variable}>
         <ThemeRegistry>
-          <Box
-            sx={{
-              display: "flex",
-              flexDirection: "column",
-              minHeight: "100vh",
-            }}
-          >
-            <Header />
-            <Box component="main" sx={{ flexGrow: 1, py: 4 }}>
-              {children}
+          <CustomerProvider>
+            {" "}
+            <Box
+              sx={{
+                display: "flex",
+                flexDirection: "column",
+                minHeight: "100vh",
+              }}
+            >
+              <Header />
+              <Box component="main" sx={{ flexGrow: 1, py: 4 }}>
+                {children}
+              </Box>
             </Box>
-          </Box>
+          </CustomerProvider>
         </ThemeRegistry>
       </body>
     </html>
