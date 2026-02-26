@@ -9,34 +9,26 @@ import {
   Paper,
   TextField,
   InputAdornment,
+  CircularProgress,
 } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import SearchIcon from "@mui/icons-material/Search";
 import { CustomerList } from "@/components/Customer/CustomerList";
+import { useCustomers } from "@/context/CustomerContext";
 import { Cliente } from "@/types/customer";
 
-const mockInitialData: Cliente[] = [
-  {
-    id: "1",
-    nome: "João Silva",
-    telefone: "(22) 99999-9999",
-    cpf: "123.456.789-00",
-    placa: "ABC1D23",
-  },
-  {
-    id: "2",
-    nome: "Maria Souza",
-    telefone: "(22) 88888-8888",
-    cpf: "987.654.321-11",
-    placa: "XYZ9A88",
-  },
-];
-
 export default function Home() {
-  const [customers, setCustomers] = useState<Cliente[]>(mockInitialData);
+  const { customers, loading, loadCustomers, removeCustomer } = useCustomers();
+  const [filter, setFilter] = useState("");
+
+  function handleFilter() {
+    loadCustomers(filter);
+  }
 
   function handleDelete(id: string) {
-    setCustomers(customers.filter((c) => c.id !== id));
+    if (confirm("Tem certeza que deseja remover este cliente?")) {
+      removeCustomer(id);
+    }
   }
 
   function handleEdit(customer: Cliente) {
@@ -62,7 +54,6 @@ export default function Home() {
           variant="contained"
           startIcon={<AddIcon />}
           size="large"
-          fullWidth={false}
           sx={{ width: { xs: "100%", sm: "auto" } }}
         >
           Novo Cliente
@@ -81,6 +72,8 @@ export default function Home() {
             fullWidth
             placeholder="Consultar pelo final da placa..."
             variant="outlined"
+            value={filter}
+            onChange={(e) => setFilter(e.target.value)}
             slotProps={{
               input: {
                 startAdornment: (
@@ -94,6 +87,7 @@ export default function Home() {
           <Button
             variant="outlined"
             size="large"
+            onClick={handleFilter}
             sx={{ height: "56px", px: 4 }}
           >
             Filtrar
@@ -101,11 +95,17 @@ export default function Home() {
         </Box>
       </Paper>
 
-      <CustomerList
-        customers={customers}
-        onDelete={handleDelete}
-        onEdit={handleEdit}
-      />
+      {loading ? (
+        <Box sx={{ display: "flex", justifyContent: "center", py: 8 }}>
+          <CircularProgress />
+        </Box>
+      ) : (
+        <CustomerList
+          customers={customers}
+          onDelete={handleDelete}
+          onEdit={handleEdit}
+        />
+      )}
     </Container>
   );
 }
