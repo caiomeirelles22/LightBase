@@ -16,7 +16,7 @@ import SearchIcon from "@mui/icons-material/Search";
 import { CustomerList } from "@/components/Customer/CustomerList";
 import { CustomerModal } from "@/components/Customer/CustomerModal";
 import { useCustomers } from "@/context/CustomerContext";
-import { Cliente } from "@/types/customer";
+import { Customer } from "@/types/customer";
 import { CustomerFormData } from "@/utils/customerSchema";
 
 export default function Home() {
@@ -67,6 +67,10 @@ export default function Home() {
     if (confirm("Tem certeza que deseja remover este cliente?")) {
       removeCustomer(id);
     }
+  }
+
+  function handleEdit(customer: Customer) {
+    console.log("Editar:", customer);
   }
 
   return (

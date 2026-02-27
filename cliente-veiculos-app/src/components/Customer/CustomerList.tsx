@@ -18,12 +18,12 @@ import {
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
-import { Cliente } from "@/types/customer";
+import { Customer } from "@/types/customer";
 
 interface CustomerListProps {
-  customers: Cliente[];
+  customers: Customer[];
   onDelete: (id: string) => void;
-  onEdit: (customer: Cliente) => void;
+  onEdit: (customer: Customer) => void;
 }
 
 export function CustomerList({
