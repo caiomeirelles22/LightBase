@@ -36,12 +36,28 @@ export function CustomerServiceMock(): ICustomerService {
   }
 
   return {
-    async list(plateEnd?: string): Promise<Customer[]> {
+    async list(searchTerm?: string): Promise<Customer[]> {
       await delay();
       const customers = getStoredData();
-      if (plateEnd) {
-        return customers.filter((c) => c.placa.endsWith(plateEnd));
+
+        const term = searchTerm?.trim();
+      if (term) {
+        const lowSearch = term.toLowerCase();
+
+        return customers.filter((c) => {
+          const cleanCPF = c.cpf.replace(/\D/g, "");
+          const cleanPhone = c.telefone.replace(/\D/g, "");
+          const cleanSearch = lowSearch.replace(/\D/g, "");
+
+          return (
+            c.nome.toLowerCase().includes(lowSearch) ||
+            c.placa.toLowerCase().includes(lowSearch) ||
+            (cleanSearch !== "" && cleanCPF.includes(cleanSearch)) ||
+            (cleanSearch !== "" && cleanPhone.includes(cleanSearch))
+          );
+        });
       }
+
       return customers;
     },
 
