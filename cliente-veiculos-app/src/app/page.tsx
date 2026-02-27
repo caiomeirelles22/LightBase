@@ -14,25 +14,59 @@ import {
 import AddIcon from "@mui/icons-material/Add";
 import SearchIcon from "@mui/icons-material/Search";
 import { CustomerList } from "@/components/Customer/CustomerList";
+import { CustomerModal } from "@/components/Customer/CustomerModal";
 import { useCustomers } from "@/context/CustomerContext";
 import { Cliente } from "@/types/customer";
+import { CustomerFormData } from "@/utils/customerSchema";
 
 export default function Home() {
-  const { customers, loading, loadCustomers, removeCustomer } = useCustomers();
+  const {
+    customers,
+    loading,
+    loadCustomers,
+    removeCustomer,
+    addCustomer,
+    updateCustomer,
+  } = useCustomers();
+
   const [filter, setFilter] = useState("");
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedCustomer, setSelectedCustomer] = useState<Cliente | null>(
+    null,
+  );
 
   function handleFilter() {
     loadCustomers(filter);
+  }
+
+  function handleOpenCreateModal() {
+    setSelectedCustomer(null);
+    setIsModalOpen(true);
+  }
+
+  function handleOpenEditModal(customer: Cliente) {
+    setSelectedCustomer(customer);
+    setIsModalOpen(true);
+  }
+
+  function handleCloseModal() {
+    setIsModalOpen(false);
+    setSelectedCustomer(null);
+  }
+
+  async function handleSaveCustomer(data: CustomerFormData) {
+    if (selectedCustomer) {
+      await updateCustomer(selectedCustomer.id, data);
+    } else {
+      await addCustomer(data);
+    }
+    handleCloseModal();
   }
 
   function handleDelete(id: string) {
     if (confirm("Tem certeza que deseja remover este cliente?")) {
       removeCustomer(id);
     }
-  }
-
-  function handleEdit(customer: Cliente) {
-    console.log("Editar:", customer);
   }
 
   return (
@@ -54,6 +88,7 @@ export default function Home() {
           variant="contained"
           startIcon={<AddIcon />}
           size="large"
+          onClick={handleOpenCreateModal}
           sx={{ width: { xs: "100%", sm: "auto" } }}
         >
           Novo Cliente
@@ -103,9 +138,16 @@ export default function Home() {
         <CustomerList
           customers={customers}
           onDelete={handleDelete}
-          onEdit={handleEdit}
+          onEdit={handleOpenEditModal}
         />
       )}
+
+      <CustomerModal
+        open={isModalOpen}
+        onClose={handleCloseModal}
+        onSave={handleSaveCustomer}
+        initialData={selectedCustomer}
+      />
     </Container>
   );
 }

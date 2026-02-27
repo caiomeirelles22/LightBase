@@ -41,8 +41,9 @@ export function CustomerProvider({ children }: { children: ReactNode }) {
   }
 
   async function addCustomer(customer: Omit<Cliente, "id">) {
-    const newCustomer = await clienteService.criar(customer);
-    setCustomers((prev) => [...prev, newCustomer]);
+    await clienteService.criar(customer);
+
+    await loadCustomers();
   }
 
   async function updateCustomer(id: string, data: Partial<Cliente>) {
