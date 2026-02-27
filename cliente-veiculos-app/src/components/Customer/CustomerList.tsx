@@ -86,6 +86,9 @@ export function CustomerList({
               >
                 Placa: {customer.placa}
               </Typography>
+              <Typography variant="body2" color="text.secondary">
+                <strong>ID:</strong> {customer.id}
+              </Typography>
             </CardContent>
           </Card>
         ))}
@@ -98,6 +101,9 @@ export function CustomerList({
       <Table>
         <TableHead sx={{ backgroundColor: "action.hover" }}>
           <TableRow>
+            <TableCell>
+              <strong>Id</strong>
+            </TableCell>
             <TableCell>
               <strong>Nome</strong>
             </TableCell>
@@ -118,6 +124,9 @@ export function CustomerList({
         <TableBody>
           {customers.map((customer) => (
             <TableRow key={customer.id} hover>
+              <TableCell>
+                <small>{customer.id}</small>
+              </TableCell>
               <TableCell>{customer.nome}</TableCell>
               <TableCell>{customer.cpf}</TableCell>
               <TableCell>{customer.telefone}</TableCell>

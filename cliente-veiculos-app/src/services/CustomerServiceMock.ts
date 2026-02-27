@@ -4,8 +4,20 @@ import { ICustomerService } from "./ICustomerService";
 const STORAGE_KEY = "@PlateSystem:customers";
 
 const defaultData: Customer[] = [
-  { id: "1", nome: "João Silva", telefone: "(22) 99999-9999", cpf: "123.456.789-00", placa: "ABC1D23" },
-  { id: "2", nome: "Maria Souza", telefone: "(22) 88888-8888", cpf: "987.654.321-11", placa: "XYZ9A88" },
+  {
+    id: "12345678",
+    nome: "João Silva",
+    telefone: "(22) 99999-9999",
+    cpf: "123.456.789-00",
+    placa: "ABC1D23",
+  },
+  {
+    id: "23456789",
+    nome: "Maria Souza",
+    telefone: "(22) 88888-8888",
+    cpf: "987.654.321-11",
+    placa: "XYZ9A88",
+  },
 ];
 
 export function CustomerServiceMock(): ICustomerService {
@@ -42,9 +54,13 @@ export function CustomerServiceMock(): ICustomerService {
       await delay();
       const customers = getStoredData();
 
+      const generatedId = Math.floor(
+        10000000 + Math.random() * 90000000,
+      ).toString();
+
       const customerWithId = {
         ...newCustomer,
-        id: crypto.randomUUID(), // Gera um ID único e seguro
+        id: generatedId,
       };
 
       const updatedData = [...customers, customerWithId];
