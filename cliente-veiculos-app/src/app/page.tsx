@@ -31,7 +31,7 @@ export default function Home() {
 
   const [filter, setFilter] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedCustomer, setSelectedCustomer] = useState<Cliente | null>(
+  const [selectedCustomer, setSelectedCustomer] = useState<Customer | null>(
     null,
   );
 
@@ -44,7 +44,7 @@ export default function Home() {
     setIsModalOpen(true);
   }
 
-  function handleOpenEditModal(customer: Cliente) {
+  function handleOpenEditModal(customer: Customer) {
     setSelectedCustomer(customer);
     setIsModalOpen(true);
   }
@@ -86,7 +86,7 @@ export default function Home() {
         }}
       >
         <Typography variant="h4" component="h1" fontWeight="500">
-          Clientes
+          Customers
         </Typography>
         <Button
           variant="contained"
@@ -95,7 +95,7 @@ export default function Home() {
           onClick={handleOpenCreateModal}
           sx={{ width: { xs: "100%", sm: "auto" } }}
         >
-          Novo Cliente
+          Novo Customer
         </Button>
       </Box>
 

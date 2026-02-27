@@ -13,13 +13,13 @@ import {
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { customerSchema, CustomerFormData } from "@/utils/customerSchema";
-import { Cliente } from "@/types/customer";
+import { Customer } from "@/types/customer";
 
 interface CustomerModalProps {
   open: boolean;
   onClose: () => void;
   onSave: (data: CustomerFormData) => Promise<void>;
-  initialData?: Cliente | null;
+  initialData?: Customer | null;
 }
 
 export function CustomerModal({
