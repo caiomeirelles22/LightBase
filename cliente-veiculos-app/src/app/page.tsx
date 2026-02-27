@@ -15,7 +15,7 @@ import AddIcon from "@mui/icons-material/Add";
 import SearchIcon from "@mui/icons-material/Search";
 import { CustomerList } from "@/components/Customer/CustomerList";
 import { useCustomers } from "@/context/CustomerContext";
-import { Cliente } from "@/types/customer";
+import { Customer } from "@/types/customer";
 
 export default function Home() {
   const { customers, loading, loadCustomers, removeCustomer } = useCustomers();
@@ -31,7 +31,7 @@ export default function Home() {
     }
   }
 
-  function handleEdit(customer: Cliente) {
+  function handleEdit(customer: Customer) {
     console.log("Editar:", customer);
   }
 

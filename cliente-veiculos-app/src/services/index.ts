@@ -1,2 +1,2 @@
-export * from './IClienteService';
-export * from './ClienteServiceMock';
+export * from './CustomerServiceMock';
+export * from './CustomerServiceMock'
