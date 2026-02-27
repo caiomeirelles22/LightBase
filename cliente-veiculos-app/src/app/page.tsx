@@ -1,6 +1,5 @@
 "use client";
 
-import { useState } from "react";
 import {
   Container,
   Typography,
@@ -16,8 +15,9 @@ import SearchIcon from "@mui/icons-material/Search";
 import { CustomerList } from "@/components/Customer/CustomerList";
 import { CustomerModal } from "@/components/Customer/CustomerModal";
 import { useCustomers } from "@/context/CustomerContext";
-import { Customer } from "@/types/customer";
-import { CustomerFormData } from "@/utils/customerSchema";
+import { useCustomerFilter } from "@/hooks/useCustomerFilter";
+import { useCustomerModal } from "@/hooks/useCustomerModal";
+import { useCustomerDeletion } from "@/hooks/useCustomerDeletion";
 
 export default function Home() {
   const {
@@ -29,49 +29,19 @@ export default function Home() {
     updateCustomer,
   } = useCustomers();
 
-  const [filter, setFilter] = useState("");
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedCustomer, setSelectedCustomer] = useState<Customer | null>(
-    null,
-  );
+  const { filter, onFilterChange, onKeyDown, applyFilter } =
+    useCustomerFilter(loadCustomers);
 
-  function handleFilter() {
-    loadCustomers(filter);
-  }
+  const {
+    isModalOpen,
+    selectedCustomer,
+    openCreate,
+    openEdit,
+    close: closeModal,
+    save: saveCustomer,
+  } = useCustomerModal(addCustomer, updateCustomer);
 
-  function handleOpenCreateModal() {
-    setSelectedCustomer(null);
-    setIsModalOpen(true);
-  }
-
-  function handleOpenEditModal(customer: Customer) {
-    setSelectedCustomer(customer);
-    setIsModalOpen(true);
-  }
-
-  function handleCloseModal() {
-    setIsModalOpen(false);
-    setSelectedCustomer(null);
-  }
-
-  async function handleSaveCustomer(data: CustomerFormData) {
-    if (selectedCustomer) {
-      await updateCustomer(selectedCustomer.id, data);
-    } else {
-      await addCustomer(data);
-    }
-    handleCloseModal();
-  }
-
-  function handleDelete(id: string) {
-    if (confirm("Tem certeza que deseja remover este cliente?")) {
-      removeCustomer(id);
-    }
-  }
-
-  function handleEdit(customer: Customer) {
-    console.log("Editar:", customer);
-  }
+  const { deleteCustomer } = useCustomerDeletion(removeCustomer);
 
   return (
     <Container maxWidth="lg">
@@ -86,16 +56,16 @@ export default function Home() {
         }}
       >
         <Typography variant="h4" component="h1" fontWeight="500">
-          Customers
+          Cliente
         </Typography>
         <Button
           variant="contained"
           startIcon={<AddIcon />}
           size="large"
-          onClick={handleOpenCreateModal}
+          onClick={openCreate}
           sx={{ width: { xs: "100%", sm: "auto" } }}
         >
-          Novo Customer
+          Novo Cliente
         </Button>
       </Box>
 
@@ -109,10 +79,10 @@ export default function Home() {
         >
           <TextField
             fullWidth
-            placeholder="Consultar pelo final da placa..."
-            variant="outlined"
+            placeholder="Buscar por nome, placa, CPF ou telefone..."
             value={filter}
-            onChange={(e) => setFilter(e.target.value)}
+            onChange={(e) => onFilterChange(e.target.value)}
+            onKeyDown={onKeyDown}
             slotProps={{
               input: {
                 startAdornment: (
@@ -126,7 +96,7 @@ export default function Home() {
           <Button
             variant="outlined"
             size="large"
-            onClick={handleFilter}
+            onClick={() => applyFilter()}
             sx={{ height: "56px", px: 4 }}
           >
             Filtrar
@@ -141,15 +111,15 @@ export default function Home() {
       ) : (
         <CustomerList
           customers={customers}
-          onDelete={handleDelete}
-          onEdit={handleOpenEditModal}
+          onDelete={deleteCustomer}
+          onEdit={openEdit}
         />
       )}
 
       <CustomerModal
         open={isModalOpen}
-        onClose={handleCloseModal}
-        onSave={handleSaveCustomer}
+        onClose={closeModal}
+        onSave={saveCustomer}
         initialData={selectedCustomer}
       />
     </Container>

@@ -30,16 +30,18 @@ export function CustomerProvider({ children }: { children: ReactNode }) {
   const [customers, setCustomers] = useState<Customer[]>([]);
   const [loading, setLoading] = useState(true);
 
-  async function loadCustomers(finalPlaca?: string) {
-    setLoading(true);
-    try {
-      const data = await costumerService.list(finalPlaca);
-      setCustomers(data);
-    } finally {
-      setLoading(false);
-    }
+ async function loadCustomers(searchTerm?: string) {
+  setLoading(true);
+  try {
+    const term = searchTerm?.trim();
+    const data = await costumerService.list(term);
+    setCustomers(data);
+  } catch (error) {
+    console.error("Erro ao carregar clientes:", error);
+  } finally {
+    setLoading(false);
   }
-
+}
   async function addCustomer(customer: Omit<Customer, "id">) {
     const newCustomer = await costumerService.create(customer);
     setCustomers((prev) => [...prev, newCustomer]);
