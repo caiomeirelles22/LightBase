@@ -7,9 +7,9 @@ export const customerSchema = z.object({
     .max(100, "O nome é muito longo"),
   telefone: z
     .string()
-    .min(10, "Telefone inválido")
+    .min(15, "Telefone inválido")
     .max(15, "Telefone inválido"),
-  cpf: z.string().min(11, "CPF inválido").max(14, "CPF inválido"),
+  cpf: z.string().min(14, "CPF inválido").max(14, "CPF inválido"),
   placa: z
     .string()
     .toUpperCase()

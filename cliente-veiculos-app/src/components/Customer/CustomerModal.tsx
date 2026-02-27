@@ -14,6 +14,7 @@ import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { customerSchema, CustomerFormData } from "@/utils/customerSchema";
 import { Customer } from "@/types/customer";
+import { formatCPF, formatPhone } from "@/utils/formatters";
 
 interface CustomerModalProps {
   open: boolean;
@@ -92,7 +93,10 @@ export function CustomerModal({
                     label="CPF"
                     error={!!errors.cpf}
                     helperText={errors.cpf?.message}
-                    inputProps={{ maxLength: 14 }}
+                    onChange={(e) => {
+                      const formatted = formatCPF(e.target.value);
+                      field.onChange(formatted);
+                    }}
                   />
                 )}
               />
@@ -109,7 +113,10 @@ export function CustomerModal({
                     label="Telefone"
                     error={!!errors.telefone}
                     helperText={errors.telefone?.message}
-                    inputProps={{ maxLength: 15 }}
+                    onChange={(e) => {
+                      const formatted = formatPhone(e.target.value);
+                      field.onChange(formatted);
+                    }}
                   />
                 )}
               />
